@@ -89,5 +89,47 @@ SELECT id, account_id,
 FROM orders
 LIMIT 10;
 
+/*Questions using the LIKE operator
+Use the accounts table to find
+
+All the companies whose names start with 'C'.
+
+All companies whose names contain the string 'one' somewhere in the name.
+
+All companies whose names end with 's'.*/
+
+SELECT name
+FROM accounts
+WHERE name LIKE 'C%';
+
+SELECT name
+FROM accounts
+WHERE name LIKE '%one%';
+
+SELECT name
+FROM accounts
+WHERE name LIKE '%s';
+
+/*Questions using IN operator.
+The IN operator is useful for working with both numeric and text columns. This operator allows you to use an =, but for more than one item of that particular column. 
+
+Use the accounts table to find the account name, primary_poc, and sales_rep_id for Walmart, Target, and Nordstrom.
+
+
+Use the web_events table to find all information regarding individuals who were contacted via the channel of organic or adwords.*/
+
+SELECT name, primary_poc, sales_rep_id
+FROM accounts
+WHERE name IN ('Walmart', 'Target', 'Nordstrom');
+
+
+SELECT *
+FROM web_events
+WHERE channel IN ('organic', 'adwords');
+
+
+
+
+
 
 
