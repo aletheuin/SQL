@@ -128,8 +128,101 @@ FROM web_events
 WHERE channel IN ('organic', 'adwords');
 
 
+/*Questions using the NOT operator
+We can pull all of the rows that were excluded from the queries in the previous two concepts with our new operator.
+
+Use the accounts table to find the account name, primary poc, and sales rep id for all stores except Walmart, Target, and Nordstrom.
+
+Use the web_events table to find all information regarding individuals who were contacted via any method except using organic or adwords methods.
+-
+Podemos extraer todas las filas que se excluyeron de las consultas en los dos conceptos anteriores con nuestro nuevo operador.
+
+Utilice la tabla de cuentas para encontrar el nombre de la cuenta, el poc principal y la identificación del representante de ventas de todas las tiendas, excepto Walmart, Target y Nordstrom.
+
+Utilice la tabla web_events para encontrar toda la información sobre las personas que fueron contactadas a través de cualquier método, excepto mediante métodos orgánicos o de AdWords.
+*/
+
+SELECT name, primary_poc, sales_rep_id
+FROM accounts
+WHERE name NOT IN ('Walmart', 'Target', 'Nordstrom');
+
+SELECT *
+FROM web_events
+WHERE channel NOT IN ('organic', 'adwords');
 
 
+/*All the companies whose names do not start with 'C'.
+
+All companies whose names do not contain the string 'one' somewhere in the name.
+
+All companies whose names do not end with 's'.
+
+-
+Todas las empresas cuyos nombres no comienzan con 'C'.
+
+Todas las empresas cuyos nombres no contienen la cadena "uno" en algún lugar del nombre.
+
+Todas las empresas cuyos nombres no terminen con 's'.*/
+
+SELECT name
+FROM accounts
+WHERE name NOT LIKE 'C%';
+
+SELECT name
+FROM accounts
+WHERE name NOT LIKE '%one%';
+
+SELECT name
+FROM accounts
+WHERE name NOT LIKE '%s';
+
+/*Solutions to AND and BETWEEN Questions
+Write a query that returns all the orders where the standard_qty is over 1000, the poster_qty is 0, and the gloss_qty is 0.*/
+
+SELECT *
+FROM orders
+WHERE standard_qty > 1000 AND poster_qty = 0 AND gloss_qty = 0;
+
+Using the accounts table, find all the companies whose names do not start with 'C' and end with 's'.
+
+SELECT name
+FROM accounts
+WHERE name NOT LIKE 'C%' AND name LIKE '%s';
+
+When you use the BETWEEN operator in SQL, do the results include the values of your endpoints, or not? Figure out the answer to this important question by writing a query that displays the order date and gloss_qty data for all orders where gloss_qty is between 24 and 29. Then look at your output to see if the BETWEEN operator included the begin and end values or not.
+
+SELECT occurred_at, gloss_qty 
+FROM orders
+WHERE gloss_qty BETWEEN 24 AND 29;
+
+You should notice that there are a number of rows in the output of this query where the gloss_qty values are 24 or 29. So the answer to the question is that yes, the BETWEEN operator in SQL is inclusive; that is, the endpoint values are included. So the BETWEEN statement in this query is equivalent to having written "WHERE gloss_qty >= 24 AND gloss_qty <= 29."
+
+You will notice that using BETWEEN is tricky for dates! While BETWEEN is generally inclusive of endpoints, it assumes the time is at 00:00:00 (i.e. midnight) for dates. This is the reason why we set the right-side endpoint of the period at '2017-01-01'.
+
+SELECT *
+FROM web_events
+WHERE channel IN ('organic', 'adwords') AND occurred_at BETWEEN '2016-01-01' AND '2017-01-01'
+ORDER BY occurred_at DESC;
+
+/*Questions using the OR operator
+Find list of orders ids where either gloss_qty or poster_qty is greater than 4000. Only include the id field in the resulting table.
 
 
+Write a query that returns a list of orders where the standard_qty is zero and either the gloss_qty or poster_qty is over 1000.
 
+
+Find all the company names that start with a 'C' or 'W', and the primary contact contains 'ana' or 'Ana', but it doesn't contain 'eana'.*/
+
+SELECT id
+FROM orders
+WHERE gloss_qty > 4000 OR poster_qty > 4000;
+
+SELECT *
+FROM orders
+WHERE standard_qty = 0 AND (gloss_qty > 1000 OR poster_qty > 1000);
+
+SELECT *
+FROM accounts
+WHERE (name LIKE 'C%' OR name LIKE 'W%') 
+           AND ((primary_poc LIKE '%ana%' OR primary_poc LIKE '%Ana%') 
+           AND primary_poc NOT LIKE '%eana%');
